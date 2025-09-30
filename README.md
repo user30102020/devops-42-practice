@@ -25,5 +25,19 @@
 
 **Подтянуть собранный образ и запустить**
 ```bash
-docker pull ghcr.io/user30102020/devops-42-practice:0.1.0
-docker run -p 8080:8080 ghcr.io/user30102020/devops-42-practice:0.1.0
+docker pull ghcr.io/user30102020/devops-42-practice:0.1.3
+docker run --rm -p 8080:8080 `                                            
+   -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/bshop42 `
+   -e SPRING_DATASOURCE_USERNAME=postgres `
+   -e SPRING_DATASOURCE_PASSWORD=password `
+   -e SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect `
+   ghcr.io/user30102020/devops-42-practice:0.1.3
+```
+
+**Скриншоты**
+
+![screenshots/img.png](screenshots/img.png)
+
+![screenshots/img1.png](screenshots/img1.png)
+
+![screenshots/img2.png](screenshots/img2.png)
