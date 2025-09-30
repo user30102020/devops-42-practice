@@ -1,13 +1,29 @@
-# Spring Boot + GitHub Actions + GHCR + Telegram
+## CI/CD (GitHub Actions + GHCR + Telegram)
 
-## Триггеры
-- `push` в `main` → сборка JAR, сборка и публикация образа в GHCR, уведомление в Telegram.
-- `tag` вида `v*` → релизные теги образа по семвер.
-- `pull_request` → только сборка/тесты без публикации.
-- `workflow_dispatch` → ручной запуск.
+**О проекте**
 
-## Ручная сборка
+Сайт барбершопа для записи на услуги.
+
+**Триггеры**
+- Push в любую ветку (`src/**`, `pom.xml`, `Dockerfile`, `.github/workflows/**`)
+- Pull Request (та же фильтрация; без публикации образа)
+- Теги `v*` (релизные сборки)
+- Расписание: ежедневно 00:00 UTC
+- Ручной запуск: `workflow_dispatch`
+
+**Артефакты и результаты**
+- JAR-артефакт в ранe `build-test`
+- Контейнерные образы в GHCR: `ghcr.io/<owner>/<repo>:<tag>`
+    - `latest` (только дефолтная ветка)
+    - `<branch>`
+    - `<branch>-<short_sha>`
+    - `X.Y.Z` по git-тегу `vX.Y.Z`
+- Telegram-уведомления о статусе (успех/ошибка)
+
+**Секреты**
+- `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID` — для уведомлений
+
+**Подтянуть собранный образ и запустить**
 ```bash
-mvn -B clean package
-docker build -t ghcr.io/<owner>/<repo>:local .
-docker run -p 8080:8080 ghcr.io/<owner>/<repo>:local
+docker pull ghcr.io/user30102020/devops-42-practice:0.1.0
+docker run -p 8080:8080 ghcr.io/user30102020/devops-42-practice:0.1.0
