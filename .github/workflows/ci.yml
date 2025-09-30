@@ -17,7 +17,7 @@ on:
       - "Dockerfile"
       - ".github/workflows/**"
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 1 * * *"
   workflow_dispatch:
 
 permissions:
@@ -35,17 +35,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
           cache: maven
-
       - name: Build & Test (Maven)
         run: mvn -B -DskipTests=false clean package
-
       - name: Upload JAR
         if: success()
         uses: actions/upload-artifact@v4
@@ -70,8 +67,8 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=branch
-            type=sha,format=short,prefix={{branch}}-
-            type=semver,pattern={{version}}
+            type=sha,format=short,prefix={{branch}}-,enable={{is_branch}}
+            type=semver,pattern={{version}},enable={{is_tag}}
 
       - name: Login to GHCR
         uses: docker/login-action@v3
